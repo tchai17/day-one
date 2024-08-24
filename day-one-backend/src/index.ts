@@ -1,23 +1,24 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import "dotenv/config";
+import Routes from "./routes/Routes";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.get("/", (request: Request, response: Response) => {
-  response.send("Hello, World!");
-});
+app.use("/api", Routes);
+
+const PORT = process.env.PORT;
 
 mongoose
   .connect(process.env.MONGODB_CONNECTION_STRING as string)
   .then(() => {
     console.log("App connected to database");
-    app.listen(7500, () => {
-      console.log("server running on port 7500");
+    app.listen(PORT, () => {
+      console.log(`server running on port ${PORT}`);
     });
   })
   .catch((error) => console.log(error));
